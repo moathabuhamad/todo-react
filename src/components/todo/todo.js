@@ -3,26 +3,20 @@ import List from '../list/list';
 import Form from '../form/form';
 import { useContext } from 'react';
 
-import { ItemsCompletedContext } from '../../context/itemsCompleted';
-import { DisplayContext } from '../../context/display.js';
 
-import { ItemsNumContext } from '../../context/itemsNum';
-
+import { SettingsContext } from '../../context/settings';
 import ReactPaginate from 'react-paginate';
-
-import { SortContext } from '../../context/sort.js';
 
 import { v4 as uuid } from 'uuid';
 
 const ToDo = () => {
-  const incomplete = useContext(ItemsCompletedContext);
-  const display = useContext(DisplayContext);
-  const itemsPerPage = useContext(ItemsNumContext);
-  const sort = useContext(SortContext);
+  const settings = useContext(SettingsContext);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(
+    JSON.parse(localStorage.getItem('list')) || [],
+  );
   const [currentList, setCurrentList] = useState(list);
 
   function addItem(item) {
@@ -30,9 +24,13 @@ const ToDo = () => {
     item.id = uuid();
     item.complete = false;
     setList([...list, item]);
+    console.log(list);
   }
 
   function deleteItem(id) {
+    if (!list[1]) {
+      localStorage.setItem('list', JSON.stringify([]));
+    }
     const items = list.filter((item) => item.id !== id);
     setList(items);
   }
@@ -49,16 +47,16 @@ const ToDo = () => {
   }
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage.num) % list.length;
+    const newOffset = (event.selected * settings.num) % list.length;
     console.log(
       `User requested page number ${event.selected}, which is offset ${newOffset}`,
     );
     setItemOffset(newOffset);
   };
 
-  function sortList() {
-    sort.setSortBy(sort.sortBy);
-    switch (sort.sortBy) {
+  function sortList(e) {
+    settings.setSortBy(e.target.innerText);
+    switch (settings.sortBy) {
       case 'name':
         setList(list.sort((a, b) => a.assignee.localeCompare(b.assignee)));
         break;
@@ -75,34 +73,46 @@ const ToDo = () => {
 
   useEffect(() => {
     let incompleteCount = list.filter((item) => !item.complete).length;
-    incomplete.setIncomplete(incompleteCount);
-    document.title = `To Do List: ${incomplete.incomplete}`;
-    const endOffset = itemOffset + itemsPerPage.num;
+    settings.setIncomplete(incompleteCount);
+    document.title = `To Do List: ${settings.incomplete}`;
+    const endOffset = itemOffset + settings.num;
     console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     setCurrentList(
-      display.display
+      settings.display
         ? list.slice(itemOffset, endOffset)
         : list.filter((item) => !item.complete).slice(itemOffset, endOffset),
     );
     setPageCount(
-      itemsPerPage.num > 0
+      settings.num > 0
         ? Math.ceil(
-            display.display
-              ? list.length / itemsPerPage.num
-              : incomplete.incomplete / itemsPerPage.num,
+            settings.display
+              ? list.length / settings.num
+              : settings.incomplete / settings.num,
           )
         : 0,
     );
-    console.log(sort.sortBy);
+    console.log(settings.sortBy);
   }, [
     list,
     pageCount,
     itemOffset,
-    sort.sortBy,
-    display.display,
-    incomplete,
-    itemsPerPage.num,
+    settings.sortBy,
+    settings.display,
+    settings,
+    settings.num,
   ]);
+  useEffect(() => {
+    if (list[0]) {
+      localStorage.setItem('list', JSON.stringify(list));
+    }
+  }, [list]);
+  useEffect(() => {
+    let data = localStorage.getItem('list');
+    let parsedData = JSON.parse(data);
+    if (parsedData) {
+      setList(parsedData);
+    }
+  }, []);
 
   return (
     <>
@@ -111,12 +121,14 @@ const ToDo = () => {
         <div id='todo-pagination'>
           {list[0] ? (
             <div id='todo-card'>
-              {display.display
+              {settings.display
                 ? currentList.map((item) => (
                     <List
                       item={item}
                       toggleComplete={toggleComplete}
                       deleteItem={deleteItem}
+                      setItemOffset={setItemOffset}
+                      listLen={list.length}
                     />
                   ))
                 : currentList
@@ -126,6 +138,8 @@ const ToDo = () => {
                         item={item}
                         toggleComplete={toggleComplete}
                         deleteItem={deleteItem}
+                        setItemOffset={setItemOffset}
+                        listLen={list.length}
                       />
                     ))}
             </div>

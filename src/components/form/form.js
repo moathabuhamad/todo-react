@@ -6,20 +6,28 @@ import {
   Switch,
   Elevation,
   ButtonGroup,
-  AnchorButton,
 } from '@blueprintjs/core';
 import { useContext } from 'react';
-import { DisplayContext } from '../../context/display.js';
-import { SortContext } from '../../context/sort';
+// import { DisplayContext } from '../../context/display.js';
+// import { SortContext } from '../../context/sort';
+import { SettingsContext } from '../../context/settings';
 import useForm from '../../hooks/form.js';
 
 export default function Form(props) {
-  const display = useContext(DisplayContext);
-  const sort = useContext(SortContext);
+  const settings = useContext(SettingsContext);
+  // const display = useContext(DisplayContext);
+  // const sort = useContext(SortContext);
   function toggleDisplay() {
-    display.setDisplay(display.display ? false : true);
+    settings.setDisplay(settings.display ? false : true);
   }
   const { handleChange, handleSubmit } = useForm(props.addItem);
+  function handlePagesNum(e) {
+    settings.setNum(parseInt(e.target.value));
+  }
+
+  function saveToLocalStorage() {
+    localStorage.setItem('settings', JSON.stringify(settings));
+  }
 
   return (
     <>
@@ -68,30 +76,40 @@ export default function Form(props) {
               <div className='displaySettings'>
                 <label>
                   <Switch
-                    checked={display.display}
+                    checked={settings.display}
                     label='show complete'
                     onChange={toggleDisplay}
                   />
                 </label>
-                <ButtonGroup>
-                  <Button
-                    outlined='true'
-                    minimal='true'
-                    onClick={(e) => sort.setSortBy(e.target.innerText)}
-                  >
-                    name
-                  </Button>
-                  <Button
-                    outlined='true'
-                    minimal='true'
-                    onClick={(e) => sort.setSortBy(e.target.innerText)}
-                  >
-                    complete
-                  </Button>
-                </ButtonGroup>
-                <AnchorButton intent='primary' onClick={props.sortList}>
-                  sort
-                </AnchorButton>
+                <label>
+                  <span>sort by:</span>
+                  <ButtonGroup>
+                    <Button
+                      outlined='true'
+                      minimal='true'
+                      onClick={props.sortList}
+                    >
+                      name
+                    </Button>
+                    <Button
+                      outlined='true'
+                      minimal='true'
+                      onClick={props.sortList}
+                    >
+                      complete
+                    </Button>
+                  </ButtonGroup>
+                </label>
+                <label>
+                  <span>items per page</span>
+                  <InputGroup
+                    onChange={handlePagesNum}
+                    name='assignee'
+                    type='number'
+                    placeholder={settings.num}
+                  />
+                </label>
+                <Button onClick={saveToLocalStorage}>Save Settings</Button>
               </div>
             </div>
           </Card>

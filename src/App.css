@@ -1,13 +1,15 @@
 @import '~normalize.css';
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+
 body {
-  background-color: #2b2d42;
-  color: #edf2f4;
+  background-color: #00171f;
+  color: #ffffff;
 }
 #main {
   display: block;
   width: 100%;
+  height: 100%;
 }
 #root {
   width: 100%;
@@ -22,9 +24,11 @@ body {
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-around;
-  background-color: #edf2f4;
-  color: #2b2d42;
-  width: 100%;
+  background-color: #ffffff;
+  color: #003459;
+  width: 80%;
+  font-size: 18px;
+  font-weight: 400;
 }
 #item-card {
   width: 50%;
@@ -34,16 +38,16 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 0;
+  font-size: 18px;
 }
 #form-component {
-  background-color: #edf2f4;
-  color: #98c1d9;
+  background-color: #ffffff;
+  color: #003459;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex: 0 0 100%;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
 }
 #todo-pagination {
@@ -51,15 +55,29 @@ body {
   align-items: center;
   flex-direction: column;
   width: 80%;
-  height: 100%;
+  height: 90%;
 }
 
-.bp4-button.bp4-intent-warning{
-  background: #d90429;
+.bp4-button.bp4-intent-warning {
+  background: #003459;
+  color: white;
+  font-weight: 500;
+  font-size: 18px;
 }
 
-.bp4-card{
-  background-color: #98c1d9;
+
+.bp4-button:not([class*=bp4-intent-]) {
+  font-weight: 400;
+  font-size: 16px;
+  color: gray;
+}
+
+.bp4-card {
+  background-color: #edf6f9;
+}
+
+small {
+  font-size: 18px;
 }
 
 #form-component #form,
@@ -69,15 +87,14 @@ form {
 #form-card {
   width: 100%;
   height: 100%;
-  background-color: #98c1d9;
-  color: #edf2f4;
+  margin-left: 30px;
+  background-color: #003459;
+  color: #ffffff;
 }
 #site-header,
 h2 {
   text-align: center;
 }
-
-
 
 .settings {
   display: flex;
@@ -92,16 +109,17 @@ h2 {
 }
 
 #paginate ul {
-  background-color: #98c1d9;
+  background-color: #00171f;
   padding: 9px;
   display: flex;
   justify-content: space-between;
   list-style-type: none;
   color: #222831;
+  margin: 12px  ;
 }
 #paginate ul li a {
-  background-color: #98c1d9;
-  color: #222831;
+  background-color: #00171f;
+  color: white;
   margin: 0;
-  padding: 8px;
+  padding: 0;
 }
