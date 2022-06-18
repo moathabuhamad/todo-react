@@ -17,8 +17,6 @@ const ToDo = () => {
     JSON.parse(localStorage.getItem('list')) || [],
   );
   const [currentList, setCurrentList] = useState(list);
-  const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
 
   function addItem(item) {
     item.id = uuid();
@@ -68,10 +66,7 @@ const ToDo = () => {
     }
   }
 
-  function handleLogin(e) {
-    e.preventDefault();
-    protect.login(username, password);
-  }
+
 
   useEffect(() => {
     let incompleteCount = list.filter((item) => !item.complete).length;
@@ -151,19 +146,6 @@ const ToDo = () => {
           </div>
         </Auth>
       </div>
-      <form onSubmit={handleLogin}>
-        <input
-          type='text'
-          placeholder='username'
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        <input
-          type='password'
-          placeholder='password'
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input type='submit' value='login' />
-      </form>
       <div id='paginate'>
         <ReactPaginate
           breakLabel='...'

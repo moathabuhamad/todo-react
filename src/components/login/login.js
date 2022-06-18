@@ -100,22 +100,21 @@ export default function Login(props) {
             minimal='true'
             intent='primary'
             outlined='true'
-            style={{ color: 'blue', marginRight: 5 }}
+            style={{ color: 'white', marginRight: 5 }}
             onClick={showLogin}
           >
-            {login ? 'hide' : 'login'}
+            {login ? 'hide' : 'Login'}
           </Button>
           <Button
             minimal='true'
             intent='primary'
             outlined='true'
-            style={{ color: 'blue' }}
+            style={{ color: 'white' }}
             onClick={showSignup}
           >
-            {signup ? 'hide' : 'create new account'}
+            {signup ? 'hide' : 'Sign Up'}
           </Button>
         </div>
-        <div></div>
       </When>
     </>
   );
