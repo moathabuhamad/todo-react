@@ -1,19 +1,17 @@
 @import '~normalize.css';
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
-
 body {
-  background-color: #00171f;
-  color: #ffffff;
+  background-color: #393e46;
+  color: #eeeeee;
 }
 #main {
   display: block;
   width: 100%;
-  height: 100%;
 }
 #root {
+  min-height: 80vh;
   width: 100%;
-  height: 80vh;
   margin: 0;
   padding: 0;
 }
@@ -21,81 +19,95 @@ body {
 #todo-card {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  background-color: #eeeeee;
+  color: #00adb5;
+  height: auto;
+  width: 90%;
+}
+#header {
+  display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  background-color: #ffffff;
-  color: #003459;
-  width: 80%;
-  font-size: 18px;
-  font-weight: 400;
+  justify-content: space-between;
 }
 #item-card {
-  width: 50%;
-  margin: 6px;
+  width: auto;
+  margin: 10px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
   padding: 0;
-  font-size: 18px;
+}
+#signup {
+  display: flex;
+  align-items: center;
+}
+#items-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 80%;
+  justify-content: space-around;
+}
+#item-details {
+  font-size: large;
+  align-self: center;
+}
+/* #signup-inputs{
+  display:flex;
+  flex-direction: column;
+} */
+#user-info {
+  display: flex;
+  flex-direction: column;
 }
 #form-component {
-  background-color: #ffffff;
-  color: #003459;
+  background-color: #eeeeee;
+  color: #00adb5;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
+  flex: 0 0 100%;
   width: 100%;
-  min-height: 100%;
+  min-height: 80vh;
   margin: 0;
 }
 #todo-pagination {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  align-items: stretch;
   width: 80%;
-  height: 90%;
+  height: auto;
 }
-
-.bp4-button.bp4-intent-warning {
-  background: #003459;
-  color: white;
-  font-weight: 500;
-  font-size: 18px;
+#theForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
-
-.bp4-button:not([class*=bp4-intent-]) {
-  font-weight: 400;
-  font-size: 16px;
-  color: gray;
-}
-
-.bp4-card {
-  background-color: #edf6f9;
-}
-
-small {
-  font-size: 18px;
-}
-
 #form-component #form,
 form {
   height: 100%;
 }
+
+.bp4-form-group {
+  margin-top: 10px;
+}
+.bp4-form-content {
+  height: auto;
+}
 #form-card {
-  width: 100%;
   height: 100%;
-  margin-left: 30px;
-  background-color: #003459;
-  color: #ffffff;
+  background-color: #eeeeee;
+  color: #00adb5;
+  margin-right: 5px;
 }
 #site-header,
 h2 {
   text-align: center;
 }
-
 .settings {
   display: flex;
   flex-direction: column;
@@ -109,17 +121,16 @@ h2 {
 }
 
 #paginate ul {
-  background-color: #00171f;
+  background-color: #00adb5;
   padding: 9px;
   display: flex;
   justify-content: space-between;
   list-style-type: none;
   color: #222831;
-  margin: 12px  ;
 }
 #paginate ul li a {
-  background-color: #00171f;
-  color: white;
+  background-color: #00adb5;
+  color: #222831;
   margin: 0;
-  padding: 0;
+  padding: 8px;
 }

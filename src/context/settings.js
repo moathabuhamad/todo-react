@@ -6,7 +6,8 @@ export default function Settings(props) {
   const [display, setDisplay] = useState(true);
   const [num, setNum] = useState(4);
   const [sortBy, setSortBy] = useState('');
-  const [incomplete, setIncomplete] = useState([]);;
+  const [incomplete, setIncomplete] = useState([]);
+  // const [localStorage,setLocalStorage] = useState({});
 
   const state = {
     display,
@@ -22,7 +23,6 @@ export default function Settings(props) {
   useEffect(() => {
     let data = localStorage.getItem('settings');
     let parsedData = JSON.parse(data);
-    console.log(parsedData);
     if (parsedData) {
       setNum(parsedData.num);
       setDisplay(parsedData.display);

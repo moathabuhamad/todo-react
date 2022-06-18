@@ -2,29 +2,28 @@ import React, { useEffect, useState } from 'react';
 import List from '../list/list';
 import Form from '../form/form';
 import { useContext } from 'react';
-
-
 import { SettingsContext } from '../../context/settings';
 import ReactPaginate from 'react-paginate';
-
 import { v4 as uuid } from 'uuid';
+import { LoginContext } from '../../context/login';
+import Auth from '../auth/auth';
 
 const ToDo = () => {
   const settings = useContext(SettingsContext);
+  const protect = useContext(LoginContext);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
-
   const [list, setList] = useState(
     JSON.parse(localStorage.getItem('list')) || [],
   );
   const [currentList, setCurrentList] = useState(list);
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
 
   function addItem(item) {
-    console.log(item);
     item.id = uuid();
     item.complete = false;
     setList([...list, item]);
-    console.log(list);
   }
 
   function deleteItem(id) {
@@ -37,7 +36,7 @@ const ToDo = () => {
 
   function toggleComplete(id) {
     const items = list.map((item) => {
-      if (item.id === id) {
+      if (item.id === id && protect.authorize('update')) {
         item.complete = !item.complete;
       }
       return item;
@@ -67,8 +66,11 @@ const ToDo = () => {
       default:
         setList(list.sort((a, b) => (b.complete ? 1 : -1)));
     }
+  }
 
-    console.log(list);
+  function handleLogin(e) {
+    e.preventDefault();
+    protect.login(username, password);
   }
 
   useEffect(() => {
@@ -91,7 +93,6 @@ const ToDo = () => {
           )
         : 0,
     );
-    console.log(settings.sortBy);
   }, [
     list,
     pageCount,
@@ -118,22 +119,12 @@ const ToDo = () => {
     <>
       <div id='form-component'>
         <Form sortList={sortList} addItem={addItem} />
-        <div id='todo-pagination'>
-          {list[0] ? (
-            <div id='todo-card'>
-              {settings.display
-                ? currentList.map((item) => (
-                    <List
-                      item={item}
-                      toggleComplete={toggleComplete}
-                      deleteItem={deleteItem}
-                      setItemOffset={setItemOffset}
-                      listLen={list.length}
-                    />
-                  ))
-                : currentList
-                    .filter((item) => !item.complete)
-                    .map((item) => (
+        <Auth action='read'>
+          <div id='todo-pagination'>
+            {list[0] ? (
+              <div id='todo-card'>
+                {settings.display
+                  ? currentList.map((item) => (
                       <List
                         item={item}
                         toggleComplete={toggleComplete}
@@ -141,13 +132,38 @@ const ToDo = () => {
                         setItemOffset={setItemOffset}
                         listLen={list.length}
                       />
-                    ))}
-            </div>
-          ) : (
-            ''
-          )}
-        </div>
+                    ))
+                  : currentList
+                      .filter((item) => !item.complete)
+                      .map((item) => (
+                        <List
+                          item={item}
+                          toggleComplete={toggleComplete}
+                          deleteItem={deleteItem}
+                          setItemOffset={setItemOffset}
+                          listLen={list.length}
+                        />
+                      ))}
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+        </Auth>
       </div>
+      <form onSubmit={handleLogin}>
+        <input
+          type='text'
+          placeholder='username'
+          onChange={(e) => setUserName(e.target.value)}
+        />
+        <input
+          type='password'
+          placeholder='password'
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input type='submit' value='login' />
+      </form>
       <div id='paginate'>
         <ReactPaginate
           breakLabel='...'
